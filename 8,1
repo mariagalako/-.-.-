@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+
+void main(List<String> args) {
+  runApp(MaterialApp(home: MyWidget()));
+}
+
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<MyWidget> {
+  final List<String> people = [
+    'BMW',
+    'Lada',
+    'Audi',
+    'Toyota',
+    'Mercedes',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('марки автомобилей')),
+      body: ListView.builder(
+        itemCount: people.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Text("марка"),
+            title: Text(people[index]),
+            subtitle: Text("Автосалон"),
+            trailing: Text("5000000"),
+          );
+        },
+      ),
+    );
+  }
+}
