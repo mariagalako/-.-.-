@@ -1,0 +1,98 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: RegistrationPage()));
+}
+
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({super.key});
+
+  @override
+  State<RegistrationPage> createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  final controller1 = TextEditingController();
+  final controller2 = TextEditingController();
+  final controller3 = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextFormField(
+              controller: controller1,
+              decoration: InputDecoration(
+                hintText: 'Введите имя кентика',
+                labelText: 'Имя кентика',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Поле не может быть пустым';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: controller2,
+              decoration: InputDecoration(
+                hintText: 'Введите password',
+                labelText: 'Пароль ',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Поле не может быть пустым';
+                }
+                if (value.length < 6) {
+                  return 'password должен содержать минимум 6 символов';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: controller3,
+              decoration: InputDecoration(
+                hintText: 'Подтвердите passworda',
+                labelText: 'Подтверждение passworsda',
+                border: const OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Поле не может быть пустым';
+                }
+                if (value != controller2.text) {
+                  return 'password не совпадают';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Успешная регистрация пользователя'),
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(),
+              child: Text('Регистрация'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
