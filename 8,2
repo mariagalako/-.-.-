@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+
+void main(List<String> args) {
+  runApp(MaterialApp(home: MyWidget()));
+}
+
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<MyWidget> {
+  final List<String> people = [
+    'BMW',
+    'Lada',
+    'Audi',
+    'Toyota',
+    'Mersedes',
+  ];
+
+  final Map<String, String> descriptions = {
+    'BMW':
+        'немецкая автомобильная компания, один из крупнейших автопроизводителей мира. Штаб-квартира находится в Мюнхене, Германия.',
+    'Lada':
+        'советская и российская марка автомобилей, производимых АО «АвтоВАЗ». Ранее использовалась только для автомобилей, поставлявшихся на экспорт, а для внутреннего рынка автомобили производились под маркой «Жигули». ',
+    'Audi':
+        'немецкая автомобилестроительная компания в составе концерна Volkswagen Group, специализирующаяся на выпуске автомобилей под маркой Audi.',
+    'Toyota':
+        'Специализируется на проектировании, производстве и продаже легковых автомобилей, минивэнов, грузовиков, интеллектуальных транспортных систем, а также запчастей и аксессуаров к ним',
+    'Mersedes':
+        'Штаб-квартира расположена в Штутгарте (Германия). Логотип — трёхлучевая звезда, символизирующая желание компании доминировать в воздухе, на земле и воде — ведь в начале XX века компания Даймлера, помимо автомобилей, производила моторы для катеров и самолётов. ',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Автосалон')),
+      body: ListView.builder(
+        itemCount: people.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Text("марка"),
+            title: Text(people[index]),
+            subtitle: Text("Автосалона"),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailScreen(
+                    name: people[index],
+                    description: descriptions[people[index]] ?? 'Нет описания',
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  final String name;
+  final String description;
+
+  const DetailScreen({
+    super.key,
+    required this.name,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Подробности')),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(name),
+          Row(children: [Text("автомобиль "), Text("любими")]),
+          SizedBox(height: 10),
+          Text(description),
+        ],
+      ),
+    );
+  }
+}
+8,2
