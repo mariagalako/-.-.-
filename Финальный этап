@@ -1,0 +1,143 @@
+import 'package:flutter/material.dart';
+
+void main(List<String> args) {
+  runApp(MaterialApp(home: MyWidget()));
+}
+
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+ 
+class _MyWidgetState extends State<MyWidget> {
+  final List<String> people = ['Домашка','Пробежка','Личное время','Кружки','Работа'];
+    
+  final Map<String, String> descriptions = {
+    'Домашка':
+        'Описание - Математика, Проги, Русский,',
+    'Пробежка':
+        'Описание - Ты бежишь по лесу, в горах, на беговых дорожках',
+    'Личное время':
+        'Описание - Ты делаешь все что хочешь не зависимо ото всех',
+    'Кружки':
+        'Описание - Хоккей, фигурное катание, теннис, плавание',
+    'Работа':
+        'Описание - Идешь ботрашить на работу с 8 до 8',
+  };
+
+  void _addNewItem() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final TextEditingController nameController = TextEditingController();
+        final TextEditingController descController = TextEditingController();
+        
+        return AlertDialog(
+          title: Text('Добавить новую запись'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Название',
+                  hintText: 'Введите название',
+                ),
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: descController,
+                decoration: InputDecoration(
+                  labelText: 'Описание',
+                  hintText: 'Введите описание',
+                ),
+                maxLines: 3,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Отмена'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (nameController.text.isNotEmpty) {
+                  setState(() {
+                    people.add(nameController.text);
+                    descriptions[nameController.text] = descController.text;
+                  });
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Добавить'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Трекер')),
+      body: ListView.builder(
+        itemCount: people.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Text("Трекер"),
+            title: Text(people[index]),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailScreen(
+                    name: people[index],
+                    description: descriptions[people[index]] ?? 'Нет описания',
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addNewItem,
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  final String name;
+  final String description;
+
+  const DetailScreen({
+    super.key,
+    required this.name,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Трекер времени - сколько хотели бы выделить на ')),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(name),
+          Row(children: [Text("Трекер:")]),
+          SizedBox(height: 10),
+          Text(description),
+        ],
+      ),
+    );
+  }
+}
+
+
