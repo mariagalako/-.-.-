@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: MyApp()));
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: HomePage());
+  }
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String selectedIcon = '👽';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(selectedIcon, style: TextStyle(fontSize: 100)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                final pickedIcon = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChooseEmojiPage()),
+                );
+                if (pickedIcon != null) {
+                  setState(() {
+                    selectedIcon = pickedIcon;
+                  });
+                }
+              },
+              child: Text('Выбрать другой смайлик'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ChooseEmojiPage extends StatelessWidget {
+  const ChooseEmojiPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> emojiList = [
+      '👿',
+      '👩🏿‍🦽',
+      '💙',
+      '🤷',
+      '🤔',
+      '💀',
+      '🐷',
+      '🌺',
+      '🦈',
+      '🥦',
+    ];
+
+    return Scaffold(
+      appBar: AppBar(title: Text('Выберите смайлик')),
+      body: Center(
+        child: Wrap(
+          spacing: 20,
+          runSpacing: 20,
+          children: emojiList.map((emojiItem) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.pop(context, emojiItem);
+              },
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(emojiItem, style: TextStyle(fontSize: 40)),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
